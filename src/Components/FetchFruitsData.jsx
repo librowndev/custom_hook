@@ -1,23 +1,21 @@
 import React from 'react';
-import UseFetch from './UseFetch';
+import fruitData from './fruit.json';
 import './FetchData.css';
 
 /**
- * Component that fetches and displays food data using the UseFetch custom hook.
+ * Component that displays fruit data from a local JSON file.
  *
  * @component
- * @returns {JSX.Element} The rendered component displaying food data.
+ * @returns {JSX.Element} The rendered component displaying fruit data.
  */
-const FetchData = () => {
-    // replacing the lab URL with a test URL from dummy.restapiexample.com
-    // const [data] = UseFetch("https://dummy.restapiexample.com/api/v1/employees")
-    const [data] = UseFetch('https://api.npoint.io/9045c260b1565daa9e15');
+const FetchFruitsData = () => {
+    const data = fruitData;
     console.log(data);
-    console.log("here I am")
+    // console.log("here I am")
 
     return (
         <>
-            <h1 className='usefetch_heading'>Use Fetch Custom Hook with Food API</h1>
+            <h1 className='usefetch_heading'>Use Fetch Custom Hook with Fruit JSONs Data</h1>
             <ul className='list_data_main'>
                 {data && data.map((e, index) => (
                     <li key={index} className='list_data'>
@@ -32,5 +30,5 @@ const FetchData = () => {
     )
 }
 
-export default FetchData
+export default FetchFruitsData;
 

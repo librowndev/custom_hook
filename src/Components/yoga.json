@@ -1,0 +1,107 @@
+[
+  {
+    "name": "Lotus Pose (Padmasana)",
+    "benefits": "Calms the brain, stimulates the pelvis, spine, abdomen, and bladder, stretches the ankles and knees, eases menstrual discomfort and sciatica, consistent practice helps develop good posture",
+    "time_duration": "5-10 minutes"
+  },
+  {
+    "name": "Sukhasana (Easy Pose)",
+    "benefits": "Calms the brain, stretches the knees and ankles, strengthens the back, improves posture",
+    "time_duration": "5-10 minutes"
+  },
+  {
+    "name": "Corpse Pose (Savasana)",
+    "benefits": "Reduces fatigue and headache, relieves mild depression, stress, and insomnia, relaxes the body and mind, helps lower blood pressure",
+    "time_duration": "10-15 minutes"
+  },
+  {
+    "name": "Half Lotus Pose (Ardha Padmasana)",
+    "benefits": "Stretches the knees and ankles, opens up the hips, helps to calm the mind, increases blood circulation in the pelvis",
+    "time_duration": "5-10 minutes"
+  },
+  {
+    "name": "Child's Pose (Balasana)",
+    "benefits": "Stretches the hips, thighs, and ankles, helps to relieve stress and fatigue, gently stretches the spine, calms the mind",
+    "time_duration": "1-5 minutes"
+  },
+  {
+    "name": "Seated Forward Bend (Paschimottanasana)",
+    "benefits": "Stretches the spine, shoulders, and hamstrings, stimulates the liver, kidneys, ovaries, and uterus, improves digestion, soothes headache and anxiety",
+    "time_duration": "1-3 minutes"
+  },
+  {
+    "name": "Mountain Pose (Tadasana)",
+    "benefits": "Improves posture, strengthens thighs, knees, and ankles, firms abdomen and buttocks, relieves sciatica, reduces flat feet",
+    "time_duration": "1-5 minutes"
+  },
+  {
+    "name": "Warrior Pose I (Virabhadrasana I)",
+    "benefits": "Strengthens the shoulders, arms, legs, ankles, and back, opens up the hips and chest, improves focus and balance",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Warrior Pose II (Virabhadrasana II)",
+    "benefits": "Stretches the hips, groins, and shoulders, increases stamina, relieves backaches, stimulates abdominal organs, improves circulation and respiration",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Warrior Pose III (Virabhadrasana III)",
+    "benefits": "Strengthens the ankles, legs, shoulders, and back, improves balance and posture, tones the abdomen",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Tree Pose (Vrksasana)",
+    "benefits": "Improves balance and stability, strengthens thighs, calves, ankles, and spine, stretches the groins, inner thighs, chest, and shoulders, relieves sciatica and reduces flat feet",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Downward-Facing Dog (Adho Mukha Svanasana)",
+    "benefits": "Energizes the body, stretches the shoulders, hamstrings, calves, arches, and hands, strengthens arms and legs, relieves stress and mild depression, improves digestion and relieves headaches",
+    "time_duration": "1-3 minutes"
+  },
+  {
+    "name": "Plank Pose (Phalakasana)",
+    "benefits": "Strengthens the arms, wrists, and spine, tones the abdomen, improves posture, increases willpower and resistance to back pain",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Cat-Cow Pose (Marjaryasana-Bitilasana)",
+    "benefits": "Increases flexibility of the spine, stretches the back torso and neck, stimulates the kidneys and adrenal glands, improves posture and balance, brings emotional balance",
+    "time_duration": "1-3 minutes"
+  },
+  {
+    "name": "Bridge Pose (Setu Bandhasana)",
+    "benefits": "Stretches the chest, neck, and spine, calms the brain and alleviates stress, stimulates abdominal organs, improves digestion, rejuvenates tired legs",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Extended Triangle Pose (Utthita Trikonasana)",
+    "benefits": "Stretches and strengthens thighs, knees, and ankles, stretches hips, groins, hamstrings, and calves, relieves backache, stimulates abdominal organs, reduces anxiety",
+    "time_duration": "30 seconds - 1 minute"
+  },
+  {
+    "name": "Fish Pose (Matsyasana)",
+    "benefits": "Stretches the deep hip flexors and muscles between the ribs, opens up the shoulders and chest, strengthens the upper back and neck muscles, stimulates the organs of the abdomen and throat",
+    "time_duration": "15-30 seconds"
+  },
+  {
+    "name": "Hero Pose (Virasana)",
+    "benefits": "Stretches the knees, ankles, and thighs, improves posture, increases blood circulation in the legs, aids digestion, reduces menstrual pain",
+    "time_duration": "1-5 minutes"
+  },
+  {
+    "name": "Thunderbolt Pose (Vajrasana)",
+    "benefits": "Improves digestion, strengthens thighs, legs, and buttocks, helps in combating acidity and gas formation, enhances blood circulation in the lower abdomen",
+    "time_duration": "5-10 minutes"
+  },
+  {
+    "name": "Cow Face Pose (Gomukhasana)",
+    "benefits": "Stretches the ankles, hips, thighs, shoulders, armpits, triceps, and chest, improves posture, stimulates kidneys and liver, reduces anxiety and fatigue",
+    "time_duration": "1-3 minutes"
+  },
+  {
+    "name": "Garland Pose (Malasana)",
+    "benefits": "Stretches the ankles, groin, and back torso, tones the belly, improves digestion, opens up the hips, strengthens the metabolism",
+    "time_duration": "1-3 minutes"
+  }
+]

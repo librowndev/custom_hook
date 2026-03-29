@@ -1,0 +1,34 @@
+import React from 'react';
+import yogaData from './yoga.json';
+import './FetchData.css';
+
+/**
+ * Component that displays fruit data from a local JSON file.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered component displaying yoga data.
+ */
+const FetchYogaJson = () => {
+    const data = yogaData;
+    console.log(data);
+    // console.log("here I am")
+
+    return (
+        <>
+            <h1 className='usefetch_heading'>Use Fetch Custom Hook with Yoga JSONs Data</h1>
+            <ul className='list_data_main'>
+                {data && data.map((e, index) => (
+                    <li key={index} className='list_data'>
+                        <h3>{e.name}</h3>
+                        <p><strong>Importance: </strong>{e.importance} </p>
+                        <p><strong>Benefits: </strong>{e.benefits} </p>
+                        <p><strong>Time Duration: </strong>{e.time_duration} </p>
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
+}
+
+export default FetchYogaJson;
+

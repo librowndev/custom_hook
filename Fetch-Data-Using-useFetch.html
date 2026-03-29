@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab: Fetch Data using useFetch</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --surface-alt: #eef0f5;
+      --border: #d4d6de;
+      --border-accent: #0062ff;
+      --text-primary: #161616;
+      --text-secondary: #525252;
+      --text-muted: #8d8d8d;
+      --accent: #0062ff;
+      --accent-light: #d0e2ff;
+      --accent-hover: #0043ce;
+      --green: #198038;
+      --green-bg: #defbe6;
+      --yellow: #b28600;
+      --yellow-bg: #fdf1c2;
+      --code-bg: #f0f2f5;
+      --code-border: #c6c8d0;
+      --heading-font: 'IBM Plex Sans', sans-serif;
+      --body-font: 'IBM Plex Sans', sans-serif;
+      --mono-font: 'IBM Plex Mono', monospace;
+      --sidebar-width: 260px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--body-font);
+      background: var(--bg);
+      color: var(--text-primary);
+      font-size: 15px;
+      line-height: 1.7;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    nav {
+      width: var(--sidebar-width);
+      min-height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    .nav-header {
+      padding: 20px 18px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-header .lab-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 2px 8px;
+      border-radius: 2px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .nav-header h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .nav-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    nav ul { list-style: none; padding: 10px 0; }
+    nav ul li a {
+      display: block;
+      padding: 7px 18px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all .15s;
+    }
+    nav ul li a:hover {
+      color: var(--accent);
+      background: var(--accent-light);
+      border-left-color: var(--accent);
+    }
+    nav ul li.active a {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── Main content ── */
+    main {
+      flex: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 52px 80px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--accent);
+      padding: 36px 40px;
+      margin-bottom: 40px;
+      border-radius: 2px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+      margin-bottom: 10px;
+      font-family: var(--heading-font);
+    }
+
+    .time-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--yellow-bg);
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 14.5px;
+      max-width: 680px;
+    }
+
+    /* ── Sections ── */
+    section { margin-bottom: 48px; }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--heading-font);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 .section-num {
+      width: 26px; height: 26px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 24px 0 10px;
+      font-family: var(--heading-font);
+    }
+
+    p { margin-bottom: 14px; color: var(--text-secondary); }
+
+    /* ── Objectives / Prerequisites lists ── */
+    .obj-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 20px 24px;
+      border-radius: 2px;
+      margin-bottom: 16px;
+    }
+
+    .obj-list ul { list-style: none; }
+    .obj-list ul li {
+      padding: 6px 0 6px 20px;
+      position: relative;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .obj-list ul li:last-child { border-bottom: none; }
+    .obj-list ul li::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 14px;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    /* ── Steps ── */
+    .steps { counter-reset: step; }
+    .step {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+      align-items: flex-start;
+    }
+    .step-num {
+      width: 28px; height: 28px;
+      background: var(--text-primary);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .step-body { flex: 1; }
+    .step-body p { margin-bottom: 10px; }
+
+    /* ── Code blocks ── */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: 4px;
+      margin: 12px 0 16px;
+      overflow: hidden;
+    }
+
+    .code-label {
+      background: var(--text-primary);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .copy-btn {
+      background: none;
+      border: 1px solid #555;
+      color: #ccc;
+      font-size: 10px;
+      padding: 2px 8px;
+      cursor: pointer;
+      border-radius: 2px;
+      font-family: var(--mono-font);
+      transition: all .15s;
+    }
+    .copy-btn:hover { background: #444; color: #fff; }
+
+    pre {
+      margin: 0;
+      padding: 18px 20px;
+      overflow-x: auto;
+      font-family: var(--mono-font);
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-primary);
+    }
+
+    code {
+      font-family: var(--mono-font);
+      font-size: 13px;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #1a1a6e;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    /* Syntax tinting */
+    .kw { color: #0043ce; font-weight: 600; }
+    .str { color: #8a3800; }
+    .fn { color: #007d79; }
+    .cm { color: #737373; font-style: italic; }
+    .tag { color: #a12771; }
+    .attr { color: #005d5d; }
+
+    /* ── Callouts ── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: 4px;
+      margin: 16px 0;
+      font-size: 13.5px;
+    }
+    .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .callout-note { background: var(--accent-light); border-left: 3px solid var(--accent); }
+    .callout-note .callout-icon::before { content: 'ℹ'; color: var(--accent); }
+    .callout-tip { background: var(--green-bg); border-left: 3px solid var(--green); }
+    .callout-tip .callout-icon::before { content: '✓'; color: var(--green); }
+    .callout p { margin: 0; color: var(--text-primary); }
+    .callout strong { color: var(--text-primary); }
+
+    /* ── Details/Summary ── */
+    details {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 16px 0;
+    }
+
+    summary {
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--accent);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    summary::before {
+      content: '▶';
+      font-size: 10px;
+      transition: transform .2s;
+    }
+    details[open] summary::before { transform: rotate(90deg); }
+    summary:hover { background: var(--accent-light); }
+
+    details .code-block { margin: 0; border-radius: 0 0 4px 4px; border-top: 1px solid var(--border); }
+
+    /* ── Definition list for API explanations ── */
+    .api-terms dt {
+      font-family: var(--mono-font);
+      font-size: 12.5px;
+      color: #1a1a6e;
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-bottom: 4px;
+      margin-top: 12px;
+    }
+    .api-terms dd {
+      padding-left: 16px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    /* ── Conclusion ── */
+    .conclusion {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--green);
+      padding: 28px 32px;
+      border-radius: 2px;
+    }
+    .conclusion h2 { border-bottom-color: transparent; padding-bottom: 0; margin-bottom: 16px; }
+    .conclusion ul { list-style: none; }
+    .conclusion ul li {
+      padding: 8px 0 8px 24px;
+      position: relative;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .conclusion ul li:last-child { border-bottom: none; }
+    .conclusion ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .license-tag {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 3px 10px;
+      border-radius: 2px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 900px) {
+      nav { display: none; }
+      main { padding: 28px 24px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Sidebar Navigation ── -->
+<nav>
+  <div class="nav-header">
+    <div class="lab-badge">IBM Skills Network</div>
+    <h2>Fetch Data using useFetch</h2>
+    <div class="nav-meta">⏱ 40 min &nbsp;·&nbsp; React</div>
+  </div>
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#setup">Setting up the Environment</a></li>
+    <li><a href="#create-hook">Create Custom Hook</a></li>
+    <li><a href="#fetch-data">Fetch Data Using Hook</a></li>
+    <li><a href="#render">Retrieve Data in Front End</a></li>
+    <li><a href="#output">Check the Output</a></li>
+    <li><a href="#alternative">Alternative Steps</a></li>
+    <li><a href="#practice">Practice Exercise</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+
+<!-- ── Main Content ── -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero" id="overview">
+    <div class="time-badge">⏱ Estimated time: 40 minutes</div>
+    <h1>Lab: Fetch Data using useFetch</h1>
+    <p>Learn how to fetch data in React using a custom hook (<code>useFetch</code>) and a corresponding component (<code>FetchData</code>). By encapsulating data-fetching logic into reusable hooks, you can improve code maintainability. You will master React's <code>useState</code> and <code>useEffect</code> hooks for managing state and asynchronous operations efficiently.</p>
+  </div>
+
+  <!-- Learning Objectives -->
+  <section>
+    <h2>Learning objectives</h2>
+    <div class="obj-list">
+      <ul>
+        <li>Fetch data from an external API using the fetch API method within a React application</li>
+        <li>Implement a custom React hook (<code>useFetch</code>) to encapsulate the logic to fetch data</li>
+        <li>Render the data retrieved from the API onto the UI and display relevant information such as name, importance, benefits, and the best time to intake for each item</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Prerequisites -->
+  <section id="prerequisites">
+    <h2>Prerequisites</h2>
+    <div class="obj-list">
+      <ul>
+        <li>Basic Knowledge of HTML</li>
+        <li>Intermediate knowledge of JavaScript</li>
+        <li>Basic Knowledge of React hooks and custom hook</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Setup -->
+  <section id="setup">
+    <h2><span class="section-num">1</span> Setting up the Environment</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p>From the menu on top of the lab, click on the <strong>Terminal</strong> tab at the top-right of the window, and then click <strong>New Terminal</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>Clone the boiler template for this React application. The <code>custom_hook</code> application includes <code>useFetch.jsx</code>, <code>FetchData.jsx</code>, and <code>FetchData.css</code>.</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>git clone https://github.com/ibm-developer-skills-network/custom_hook.git</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>This will create a folder named <strong>custom_hook</strong> under the project folder with the following structure:</p>
+          <div class="code-block">
+            <div class="code-label">folder structure</div>
+            <pre><code>custom_hook/
+└── src/
+    ├── Components/
+    │   ├── FetchData.css
+    │   ├── FetchData.jsx
+    │   └── UseFetch.jsx
+    ├── App.jsx
+    ├── main.jsx
+    └── index.html</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p>Navigate into the <code>custom_hook</code> folder:</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>cd custom_hook</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <p>Install all necessary packages:</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>npm install</code></pre>
+          </div>
+          <p>Then run the application (provides port 4173):</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>npm run preview</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <p>To view your React application, click the <strong>Skills Network</strong> icon on the left panel → <strong>Launch Application</strong> → enter port <strong>4173</strong> → click the launch button.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <p>The output will display the heading: <strong>Use Fetch Custom Hook</strong> with an empty list below it.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Create Custom Hook -->
+  <section id="create-hook">
+    <h2><span class="section-num">2</span> Create Custom Hook</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p>Navigate to <code>FetchData.jsx</code> located in <code>src/Components/</code>. The basic structure is:</p>
+          <div class="code-block">
+            <div class="code-label">jsx — FetchData.jsx (starter) <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> React <span class="kw">from</span> <span class="str">'react'</span>
+
+<span class="kw">const</span> <span class="fn">FetchData</span> = () => {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">ul</span> <span class="attr">className</span>=<span class="str">'list_data_main'</span>&gt;
+        &lt;<span class="tag">h1</span> <span class="attr">className</span>=<span class="str">'useFetch_heading'</span>&gt;Use Fetch Custom Hook&lt;/<span class="tag">h1</span>&gt;
+      &lt;/<span class="tag">ul</span>&gt;
+    &lt;/&gt;
+  )
+}
+
+<span class="kw">export default</span> FetchData</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>There are two approaches to fetching data:</p>
+          <p><strong>Approach 1 — Per-component fetch:</strong> Implement the fetch logic in each component that needs data. If you have 5 components, you must write the same logic 5 times.</p>
+          <p><strong>Approach 2 — Custom hook (recommended):</strong> Create a reusable <code>useFetch</code> hook that encapsulates the data-fetching logic and can be used by any component.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Navigate to <code>useFetch.jsx</code>. The basic layout is:</p>
+          <div class="code-block">
+            <div class="code-label">jsx — useFetch.jsx (starter) <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">const</span> <span class="fn">useFetch</span> = (url) => {
+}
+
+<span class="kw">export default</span> useFetch</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p>Add the <code>useState</code> import and declare the <code>data</code> state variable:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="cm">// inside the useFetch arrow function:</span>
+<span class="kw">const</span> [data, setData] = <span class="fn">useState</span>();</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <p>Update the import to include <code>useEffect</code>, then add the fetch logic:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;</code></pre>
+          </div>
+          <div class="code-block">
+            <div class="code-label">jsx — useEffect block <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="fn">useEffect</span>(() => {
+  <span class="fn">fetch</span>(url)
+    .then((res) => res.<span class="fn">json</span>())
+    .then((data) => <span class="fn">setData</span>(data))
+}, [])
+<span class="kw">return</span> [data]</code></pre>
+          </div>
+
+          <dl class="api-terms">
+            <dt>useEffect</dt>
+            <dd>A React Hook for side effects in functional components — data fetching, subscriptions, etc.</dd>
+            <dt>fetch(url)</dt>
+            <dd>Initiates an HTTP request to the specified URL.</dd>
+            <dt>.then((res) =&gt; res.json())</dt>
+            <dd>Converts the server response to JSON format.</dd>
+            <dt>.then((data) =&gt; setData(data))</dt>
+            <dd>Stores the retrieved data in the React state variable.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <p>The complete <code>useFetch.jsx</code> file:</p>
+          <div class="code-block">
+            <div class="code-label">jsx — useFetch.jsx (complete) <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> React, { useEffect, useState } <span class="kw">from</span> <span class="str">'react'</span>
+
+<span class="kw">const</span> <span class="fn">useFetch</span> = (url) => {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>();
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="fn">fetch</span>(url)
+      .then((res) => res.<span class="fn">json</span>())
+      .then((data) => <span class="fn">setData</span>(data))
+  }, [])
+
+  <span class="kw">return</span> [data]
+}
+
+<span class="kw">export default</span> useFetch</code></pre>
+          </div>
+          <div class="callout callout-note">
+            <div class="callout-icon"></div>
+            <p>The <code>url</code> parameter lets any component provide a URL dynamically, enabling seamless data fetching from various sources without redundant code.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fetch Data -->
+  <section id="fetch-data">
+    <h2><span class="section-num">3</span> Fetch Data Using Custom Hook</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p>Back in <code>FetchData.jsx</code>, import <code>useFetch</code> and call it with the API URL (add before the <code>return</code> statement):</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> useFetch <span class="kw">from</span> <span class="str">'./UseFetch'</span>;
+
+<span class="cm">// inside FetchData component:</span>
+<span class="kw">const</span> [data] = <span class="fn">useFetch</span>(<span class="str">'https://api.npoint.io/9045c260b1565daa9e15'</span>);
+console.<span class="fn">log</span>(data);</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>Re-run the app, open the browser DevTools (<strong>Right-click → Inspect → Console</strong>). You should see an array of 20 objects, each with these fields:</p>
+          <div class="code-block">
+            <div class="code-label">console output (sample object)</div>
+            <pre><code>{
+  name: "Banana Data",
+  benefits: "Energy boost, aids digestions and etc",
+  best_time_to_intake: "Morning or as a snack",
+  importance: "High in potassium and vitamins and fatty acids",
+  image: "https://..."
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Render -->
+  <section id="render">
+    <h2><span class="section-num">4</span> Retrieve Data in Front End</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <p>Apply the <code>map</code> array method within the <code>&lt;ul&gt;</code> tag (after the <code>&lt;h1&gt;</code>) to iterate over the data:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>{data && data.<span class="fn">map</span>((e) => (
+  &lt;&gt;
+  &lt;/&gt;
+))}</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>Create an <code>&lt;li&gt;</code> inside the fragment to render each item's fields:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>&lt;<span class="tag">li</span> <span class="attr">key</span>={index} <span class="attr">className</span>=<span class="str">'list_data'</span>&gt;
+  &lt;<span class="tag">h3</span>&gt;{e.name}&lt;/<span class="tag">h3</span>&gt;
+  &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Importance: &lt;/<span class="tag">strong</span>&gt;{e.importance}&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Benefits: &lt;/<span class="tag">strong</span>&gt;{e.benefits}&lt;/<span class="tag">p</span>&gt;
+  &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Time to eat: &lt;/<span class="tag">strong</span>&gt;{e.best_time_to_intake}&lt;/<span class="tag">p</span>&gt;
+&lt;/<span class="tag">li</span>&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Import the CSS file at the top of <code>FetchData.jsx</code>:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> <span class="str">'./FetchData.css'</span></code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p>The complete <code>FetchData.jsx</code> file:</p>
+          <div class="code-block">
+            <div class="code-label">jsx — FetchData.jsx (complete) <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> React <span class="kw">from</span> <span class="str">'react'</span>
+<span class="kw">import</span> useFetch <span class="kw">from</span> <span class="str">'./UseFetch'</span>
+<span class="kw">import</span> <span class="str">'./FetchData.css'</span>
+
+<span class="kw">const</span> <span class="fn">FetchData</span> = () => {
+  <span class="kw">const</span> [data] = <span class="fn">useFetch</span>(<span class="str">'https://api.npoint.io/9045c260b1565daa9e15'</span>);
+  console.<span class="fn">log</span>(data);
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">h1</span> <span class="attr">className</span>=<span class="str">'useFetch_heading'</span>&gt;Use Fetch Custom Hook&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">ul</span> <span class="attr">className</span>=<span class="str">'list_data_main'</span>&gt;
+        {data && data.<span class="fn">map</span>((e, index) => (
+          &lt;<span class="tag">li</span> <span class="attr">key</span>={index} <span class="attr">className</span>=<span class="str">'list_data'</span>&gt;
+            &lt;<span class="tag">h3</span>&gt;{e.name}&lt;/<span class="tag">h3</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Importance: &lt;/<span class="tag">strong</span>&gt;{e.importance}&lt;/<span class="tag">p</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Benefits: &lt;/<span class="tag">strong</span>&gt;{e.benefits}&lt;/<span class="tag">p</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Time to eat: &lt;/<span class="tag">strong</span>&gt;{e.best_time_to_intake}&lt;/<span class="tag">p</span>&gt;
+          &lt;/<span class="tag">li</span>&gt;
+        ))}
+      &lt;/<span class="tag">ul</span>&gt;
+    &lt;/&gt;
+  )
+}
+
+<span class="kw">export default</span> FetchData</code></pre>
+          </div>
+          <div class="callout callout-note">
+            <div class="callout-icon"></div>
+            <p>The <code>e</code> parameter contains the value of each array index for every iteration.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Output -->
+  <section id="output">
+    <h2><span class="section-num">5</span> Check the Output</h2>
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Stop the running app with <code>Ctrl+C</code>.</p></div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <p>Re-run:</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>npm run preview</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Refresh the browser at port <strong>4173</strong>. The output will display a styled list of food items, each showing name, importance, benefits, and best time to eat.</p>
+          <div class="callout callout-note">
+            <div class="callout-icon"></div>
+            <p>To see the latest changes, you need to execute <code>npm run preview</code> again in the terminal each time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Full Solutions</h3>
+
+    <details>
+      <summary>Full solution — useFetch.jsx</summary>
+      <div class="code-block">
+        <pre><code><span class="kw">import</span> { useState, useEffect } <span class="kw">from</span> <span class="str">"react"</span>;
+
+<span class="kw">const</span> <span class="fn">useFetch</span> = (url) => {
+  <span class="kw">const</span> [data, setData] = <span class="fn">useState</span>();
+
+  <span class="fn">useEffect</span>(() => {
+    <span class="fn">fetch</span>(url)
+      .then((res) => res.<span class="fn">json</span>())
+      .then((data) => <span class="fn">setData</span>(data))
+  }, [])
+
+  <span class="kw">return</span> [data]
+}
+
+<span class="kw">export default</span> useFetch</code></pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Full solution — FetchData.jsx</summary>
+      <div class="code-block">
+        <pre><code><span class="kw">import</span> React <span class="kw">from</span> <span class="str">'react'</span>
+<span class="kw">import</span> useFetch <span class="kw">from</span> <span class="str">'./UseFetch'</span>
+<span class="kw">import</span> <span class="str">'./FetchData.css'</span>
+
+<span class="kw">const</span> <span class="fn">FetchData</span> = () => {
+  <span class="kw">const</span> [data] = <span class="fn">useFetch</span>(<span class="str">'https://api.npoint.io/9045c260b1565daa9e15'</span>);
+  console.<span class="fn">log</span>(data);
+
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">h1</span> <span class="attr">className</span>=<span class="str">'useFetch_heading'</span>&gt;Use Fetch Custom Hook&lt;/<span class="tag">h1</span>&gt;
+      &lt;<span class="tag">ul</span> <span class="attr">className</span>=<span class="str">'list_data_main'</span>&gt;
+        {data && data.<span class="fn">map</span>((e, index) => (
+          &lt;<span class="tag">li</span> <span class="attr">key</span>={index} <span class="attr">className</span>=<span class="str">'list_data'</span>&gt;
+            &lt;<span class="tag">h3</span>&gt;{e.name}&lt;/<span class="tag">h3</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Importance: &lt;/<span class="tag">strong</span>&gt;{e.importance}&lt;/<span class="tag">p</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Benefits: &lt;/<span class="tag">strong</span>&gt;{e.benefits}&lt;/<span class="tag">p</span>&gt;
+            &lt;<span class="tag">p</span>&gt;&lt;<span class="tag">strong</span>&gt;Time to eat: &lt;/<span class="tag">strong</span>&gt;{e.best_time_to_intake}&lt;/<span class="tag">p</span>&gt;
+          &lt;/<span class="tag">li</span>&gt;
+        ))}
+      &lt;/<span class="tag">ul</span>&gt;
+    &lt;/&gt;
+  )
+}
+
+<span class="kw">export default</span> FetchData</code></pre>
+      </div>
+    </details>
+
+    <details>
+      <summary>Full solution — App.jsx</summary>
+      <div class="code-block">
+        <pre><code><span class="kw">import</span> React <span class="kw">from</span> <span class="str">'react'</span>
+<span class="kw">import</span> FetchData <span class="kw">from</span> <span class="str">'./Components/FetchData'</span>
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    &lt;&gt;
+      &lt;<span class="tag">FetchData</span> /&gt;
+    &lt;/&gt;
+  )
+}
+
+<span class="kw">export default</span> App</code></pre>
+      </div>
+    </details>
+  </section>
+
+  <!-- Alternative -->
+  <section id="alternative">
+    <h2><span class="section-num">6</span> Alternative Steps to Fetching Data</h2>
+    <div class="callout callout-note">
+      <div class="callout-icon"></div>
+      <p><strong>Note:</strong> If you are having difficulty accessing the API, you can alternatively create a local JSON file. If you have already completed the lab using the API, skip this section and proceed to the Practice Exercise.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Create a file named <code>fruit.json</code> inside the <code>Components</code> folder to store all the fruit data.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><p>Update <code>src/Components/FetchData.jsx</code> to fetch data from <code>fruit.json</code> instead of the API URL.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><p>Update <code>src/Components/useFetch.jsx</code> with the same hook logic adapted for a local JSON import.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <p>Check the output:</p>
+          <div class="code-block">
+            <div class="code-label">terminal <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code>npm run preview</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Practice -->
+  <section id="practice">
+    <h2><span class="section-num">7</span> Practice Exercise</h2>
+    <p>Apply what you've learned by building a <strong>Yoga Benefits</strong> component that reuses the same <code>useFetch</code> hook.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><p>Create a new component file: <code>FetchYogaData.jsx</code> in the <code>Components</code> folder.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><p>Build the basic function component structure.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <p>Import <code>UseFetch</code> and call it with the Yoga API URL:</p>
+          <div class="code-block">
+            <div class="code-label">jsx <button class="copy-btn" onclick="copyCode(this)">copy</button></div>
+            <pre><code><span class="kw">import</span> UseFetch <span class="kw">from</span> <span class="str">'./UseFetch'</span>;
+
+<span class="cm">// API URL:</span>
+<span class="kw">const</span> [data] = <span class="fn">UseFetch</span>(<span class="str">'https://api.npoint.io/4459a9a10e43812e1152'</span>);</code></pre>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><p>Add <code>console.log(data)</code> before the return statement to verify data is loading.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><p>Import <code>FetchYogaData</code> into <code>App.jsx</code> and render it.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <p>Create a <code>&lt;ul className='list_data_main'&gt;</code> and map through the data to render each yoga pose inside <code>&lt;li&gt;</code> tags. The expected output shows poses with name, benefits, and duration (e.g., Lotus Pose, Sukhasana, Corpse Pose, Half Lotus Pose, Child's Pose).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Conclusion -->
+  <section id="conclusion">
+    <div class="conclusion">
+      <h2>🎉 Conclusion</h2>
+      <p>Congratulations! You have created a React application to fetch data using your own custom hook!</p>
+      <ul>
+        <li>Built <code>FetchData</code>, a React component that renders fetched API data onto the UI</li>
+        <li>Created a custom <code>useFetch</code> hook using <code>useState</code> and <code>useEffect</code> for async data management</li>
+        <li>Implemented <code>Array.map()</code> to dynamically render each data item with JSX</li>
+        <li>Adopted a modular, reusable approach — any component can fetch different data by simply passing a different URL to <code>useFetch</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Author: Richa Arora &nbsp;·&nbsp; © IBM Corporation. All rights reserved.</span>
+    <span class="license-tag">Apache 2.0</span>
+  </footer>
+
+</main>
+
+<script>
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      btn.textContent = 'copied!';
+      setTimeout(() => btn.textContent = 'copy', 2000);
+    });
+  }
+
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.parentElement.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
